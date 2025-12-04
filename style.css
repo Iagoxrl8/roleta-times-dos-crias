@@ -4,15 +4,25 @@ body {
   text-align: center;
   margin: 0;
   padding: 24px;
-  /* TROQUE fundo.jpg pelo nome exato da sua imagem */
-  background: url("feioso.png") no-repeat center center fixed;
+  /* Agora usando feioso.png */
+  background: url("./feioso.png") no-repeat center center fixed;
   background-size: cover;
+  position: relative;
+}
+
+/* leve escurecido para melhorar leitura sobre a foto */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  pointer-events: none;
 }
 
 h1 {
   color: #fff;
-  text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
   margin-bottom: 12px;
+  position: relative;
 }
 
 button {
@@ -24,7 +34,8 @@ button {
   color: #fff;
   border: none;
   border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+  position: relative;
 }
 
 /* Roleta visual */
@@ -38,7 +49,8 @@ button {
   align-items: center;
   justify-content: center;
   background: conic-gradient(#ffefd5 0 25%, #ffe4b5 0 50%, #ffd39b 0 75%, #ffc07a 0 100%);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+  position: relative;
 }
 
 .roleta {
@@ -52,8 +64,11 @@ button {
   font-size: 22px;
   font-weight: bold;
   color: #333;
-  animation: girar 0.8s linear infinite; /* gira durante o sorteio */
-  box-shadow: inset 0 4px 10px rgba(0,0,0,0.2);
+  box-shadow: inset 0 4px 10px rgba(0,0,0,0.25);
+}
+
+.spin {
+  animation: girar 0.8s linear infinite;
 }
 
 @keyframes girar {
@@ -68,12 +83,13 @@ button {
   gap: 24px;
   margin-top: 22px;
   flex-wrap: wrap;
+  position: relative;
 }
 
 .times > div {
-  background: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.95);
   border-radius: 10px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.45);
   padding: 16px 20px;
   width: 320px;
 }
