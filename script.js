@@ -1,4 +1,3 @@
-// Lista completa de jogadores
 const jogadores = [
   "andrew", "andrey", "gustavo", "iago", "joao", "carlos", "lincoln",
   "gordão", "rick", "dudu", "jeza", "ricardo", "piero", "gurjas", "hudson", "matheus"
@@ -13,25 +12,27 @@ const fixosPreto = ["joao", "iago", "andrew", "gurjas"];
 // Fixos em "Próximos"
 const fixosProximos = ["gordão"];
 
+// Limite máximo de jogadores por time
+const limitePorTime = 6;
+
 const btn = document.getElementById("btnSortear");
 const roletaEl = document.getElementById("roleta");
 const listaBranco = document.getElementById("timeBranco");
 const listaPreto = document.getElementById("timePreto");
 const listaProximos = document.getElementById("timeProximos");
 
-// TESTE: ver se script carregou
-console.log("script.js carregado corretamente!");
-
 btn.addEventListener("click", iniciarSorteio);
 
 async function iniciarSorteio() {
-  console.log("Botão clicado!"); // teste no console
-
   roletaEl.classList.add("spin");
   roletaEl.textContent = "?";
   listaBranco.innerHTML = "";
   listaPreto.innerHTML = "";
   listaProximos.innerHTML = "";
+
+  const timeBranco = [];
+  const timePreto = [];
+  const timeProximos = [];
 
   const fila = shuffle(jogadores).map(n => n.toLowerCase());
 
@@ -40,17 +41,34 @@ async function iniciarSorteio() {
     roletaEl.textContent = label.toUpperCase();
 
     if (fixosPreto.includes(nomeLower)) {
-      appendItem(listaPreto, label);
+      if (timePreto.length < limitePorTime) {
+        timePreto.push(nomeLower);
+        appendItem(listaPreto, label);
+      }
     } else if (fixosProximos.includes(nomeLower)) {
+      timeProximos.push(nomeLower);
       appendItem(listaProximos, label);
     } else if (fixosBranco.includes(nomeLower)) {
-      appendItem(listaBranco, label);
+      if (timeBranco.length < limitePorTime) {
+        timeBranco.push(nomeLower);
+        appendItem(listaBranco, label);
+      }
     } else {
-      // os demais caem aleatoriamente em Branco ou Preto
-      if (Math.random() < 0.5) {
+      // Distribuição aleatória respeitando limite
+      if (timeBranco.length >= limitePorTime && timePreto.length < limitePorTime) {
+        timePreto.push(nomeLower);
+        appendItem(listaPreto, label);
+      } else if (timePreto.length >= limitePorTime && timeBranco.length < limitePorTime) {
+        timeBranco.push(nomeLower);
         appendItem(listaBranco, label);
       } else {
-        appendItem(listaPreto, label);
+        if (Math.random() < 0.5 && timeBranco.length < limitePorTime) {
+          timeBranco.push(nomeLower);
+          appendItem(listaBranco, label);
+        } else if (timePreto.length < limitePorTime) {
+          timePreto.push(nomeLower);
+          appendItem(listaPreto, label);
+        }
       }
     }
 
