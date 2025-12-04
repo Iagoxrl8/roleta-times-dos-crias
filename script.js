@@ -1,9 +1,10 @@
+// Lista completa de jogadores (inclui Gurjas)
 const jogadores = [
   "andrew", "andrey", "gustavo", "iago", "joao", "carlos", "lincoln",
-  "gordão", "rick", "dudu", "jeza", "ricardo", "piero", "hudson"
+  "gordão", "rick", "dudu", "jeza", "ricardo", "piero", "gurjas", "hudson"
 ];
 
-// Fixos no time preto
+// Fixos no time preto (garantidos)
 const fixosPreto = ["joao", "iago", "ricardo", "gurjas", "hudson", "andrew"];
 
 // Fixos em "Próximos"
