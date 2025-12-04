@@ -5,7 +5,7 @@ body {
   margin: 0;
   padding: 24px;
   /* TROQUE fundo.jpg pelo nome exato da sua imagem */
-  background: url("fundo.jpg") no-repeat center center fixed;
+  background: url("feioso.png") no-repeat center center fixed;
   background-size: cover;
 }
 
