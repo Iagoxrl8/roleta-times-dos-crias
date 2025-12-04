@@ -7,10 +7,6 @@ const jogadores = [
 // Fixos no time preto (garantidos)
 const fixosPreto = ["joao", "iago", "ricardo", "gurjas", "hudson", "andrew"].map(n => n.toLowerCase());
 
-// Alvo de tamanho dos times para equilibrar
-const tamanhoTotal = jogadores.length;
-const alvoPorTime = Math.ceil(tamanhoTotal / 2); // metade (arredondado para cima)
-
 // Elementos
 const btn = document.getElementById("btnSortear");
 const roletaEl = document.getElementById("roleta");
@@ -27,10 +23,6 @@ async function iniciarSorteio() {
   listaBranco.innerHTML = "";
   listaPreto.innerHTML = "";
 
-  // Estados
-  const timePreto = [];
-  const timeBranco = [];
-
   // Fila aleatória (nome por nome)
   const fila = shuffle(jogadores.map(n => n.toLowerCase()));
 
@@ -38,27 +30,14 @@ async function iniciarSorteio() {
   for (const nome of fila) {
     roletaEl.textContent = toLabel(nome).toUpperCase();
 
-    // Decide o time
-    let vaiPreto;
-    if (fixosPreto.includes(nome)) {
-      vaiPreto = true; // regra fixa
-    } else {
-      // manter equilíbrio: se um time já alcançou o alvo, o outro recebe
-      if (timePreto.length >= alvoPorTime) {
-        vaiPreto = false;
-      } else if (timeBranco.length >= alvoPorTime) {
-        vaiPreto = true;
-      } else {
-        // ambos abaixo do alvo: aleatório
-        vaiPreto = Math.random() < 0.5;
-      }
-    }
+    // Alocação determinística:
+    // - Se está em fixosPreto -> vai para Preto
+    // - Caso contrário -> vai para Branco
+    const vaiPreto = fixosPreto.includes(nome);
 
     if (vaiPreto) {
-      timePreto.push(nome);
       appendItem(listaPreto, nome);
     } else {
-      timeBranco.push(nome);
       appendItem(listaBranco, nome);
     }
 
