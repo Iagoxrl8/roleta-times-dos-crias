@@ -8,29 +8,32 @@ const fixosPreto = ["iago", "ricardo", "joao", "gurjas", "hudson"];
 
 function iniciarSorteio() {
   const roleta = document.getElementById("roleta");
-  roleta.style.animation = "girar 0.5s linear infinite"; // ativa giro
+  roleta.style.animation = "girar 0.8s linear infinite"; // ativa giro
 
-  // Separar fixos
+  // Separar os fixos
   let timePreto = [...fixosPreto];
   let restantes = jogadores.filter(j => !fixosPreto.includes(j));
   restantes = shuffle(restantes);
 
-  // Revelar nomes um por um
-  let index = 0;
+  // Mostrar nomes um por um na roleta
+  let idx = 0;
   const intervalo = setInterval(() => {
-    if (index < restantes.length) {
-      roleta.innerText = restantes[index].toUpperCase();
-      index++;
+    if (idx < restantes.length) {
+      roleta.textContent = restantes[idx].toUpperCase();
+      idx++;
     } else {
       clearInterval(intervalo);
       roleta.style.animation = "none"; // parar giro
+      roleta.textContent = "Resultado";
       sortearTimes(restantes, timePreto);
     }
-  }, 800); // tempo entre cada nome
+  }, 800); // tempo entre cada nome mostrado
 }
 
 function sortearTimes(restantes, timePreto) {
-  const vagasPreto = Math.ceil(jogadores.length / 2) - fixosPreto.length;
+  // Preencher o time preto até metade
+  const metade = Math.ceil(jogadores.length / 2);
+  const vagasPreto = metade - fixosPreto.length;
   const adicionaisPreto = restantes.slice(0, vagasPreto);
   const timeBranco = restantes.slice(vagasPreto);
   timePreto = timePreto.concat(adicionaisPreto);
@@ -39,6 +42,7 @@ function sortearTimes(restantes, timePreto) {
   renderLista("timePreto", timePreto);
 }
 
+// Embaralhamento Fisher-Yates
 function shuffle(array) {
   const arr = [...array];
   for (let i = arr.length - 1; i > 0; i--) {
