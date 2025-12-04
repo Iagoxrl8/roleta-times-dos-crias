@@ -4,7 +4,7 @@ body {
   text-align: center;
   margin: 0;
   padding: 24px;
-  /* Agora usando feioso.png */
+  /* Usando feioso.png como fundo */
   background: url("./feioso.png") no-repeat center center fixed;
   background-size: cover;
   position: relative;
@@ -36,6 +36,27 @@ button {
   border-radius: 6px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.35);
   position: relative;
+}
+
+/* Wrapper e ponteiro da roleta */
+.roleta-wrapper {
+  width: 240px;
+  margin: 0 auto 12px;
+  position: relative;
+}
+
+.pointer {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 18px solid #ff2d2d; /* triangulo vermelho */
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.4));
+  z-index: 10;
 }
 
 /* Roleta visual */
