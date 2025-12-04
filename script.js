@@ -1,4 +1,4 @@
-// Lista original de jogadores
+// Lista de jogadores
 const jogadores = [
   "andrew", "andrey", "Gustavo", "iago", "joao", "carlos", "lincoln",
   "gordão", "rick", "dudu", "jeza", "ricardo", "piero", "gurjas", "hudson"
@@ -7,9 +7,9 @@ const jogadores = [
 // Fixos no time preto (garantidos)
 const fixosPreto = ["joao", "iago", "ricardo", "gurjas", "hudson", "andrew"].map(n => n.toLowerCase());
 
-// Alvo de tamanho dos times (metade arredondada para cima)
+// Alvo de tamanho dos times para equilibrar
 const tamanhoTotal = jogadores.length;
-const alvoPreto = Math.ceil(tamanhoTotal / 2); // preto terá ~metade
+const alvoPorTime = Math.ceil(tamanhoTotal / 2); // metade (arredondado para cima)
 
 // Elementos
 const btn = document.getElementById("btnSortear");
@@ -20,57 +20,41 @@ const listaPreto = document.getElementById("timePreto");
 // Inicia o sorteio ao clique
 btn.addEventListener("click", iniciarSorteio);
 
-function iniciarSorteio() {
+async function iniciarSorteio() {
   // Reset visual e listas
   roletaEl.classList.add("spin");
   roletaEl.textContent = "?";
   listaBranco.innerHTML = "";
   listaPreto.innerHTML = "";
 
-  // Estado dos times
+  // Estados
   const timePreto = [];
   const timeBranco = [];
 
-  // Ordem aleatória de revelação (nome por nome)
+  // Fila aleatória (nome por nome)
   const fila = shuffle(jogadores.map(n => n.toLowerCase()));
 
-  // Processa um nome por vez com intervalo
-  let idx = 0;
-  const intervalo = setInterval(() => {
-    if (idx >= fila.length) {
-      clearInterval(intervalo);
-      roletaEl.classList.remove("spin");
-      roletaEl.textContent = "Fim!";
-      return;
-    }
-
-    const nome = fila[idx];
-    // Mostra na roleta
+  // Revela e aloca um por um (sequencial)
+  for (const nome of fila) {
     roletaEl.textContent = toLabel(nome).toUpperCase();
 
     // Decide o time
-    let vaiParaPreto;
+    let vaiPreto;
     if (fixosPreto.includes(nome)) {
-      vaiParaPreto = true; // regra fixa
+      vaiPreto = true; // regra fixa
     } else {
-      // Distribuição para equilibrar até o alvo do preto
-      if (timePreto.length < alvoPreto) {
-        // chance de preencher preto até atingir alvo, senão branco
-        // para garantir aleatoriedade leve, usamos um critério com folga
-        const precisaPreto = alvoPreto - timePreto.length;
-        const precisaBranco = alvoPreto - timeBranco.length; // referência de equilíbrio
-        if (precisaPreto > precisaBranco || Math.random() < 0.5) {
-          vaiParaPreto = true;
-        } else {
-          vaiParaPreto = false;
-        }
+      // manter equilíbrio: se um time já alcançou o alvo, o outro recebe
+      if (timePreto.length >= alvoPorTime) {
+        vaiPreto = false;
+      } else if (timeBranco.length >= alvoPorTime) {
+        vaiPreto = true;
       } else {
-        vaiParaPreto = false;
+        // ambos abaixo do alvo: aleatório
+        vaiPreto = Math.random() < 0.5;
       }
     }
 
-    // Adiciona e atualiza visual
-    if (vaiParaPreto) {
+    if (vaiPreto) {
       timePreto.push(nome);
       appendItem(listaPreto, nome);
     } else {
@@ -78,8 +62,13 @@ function iniciarSorteio() {
       appendItem(listaBranco, nome);
     }
 
-    idx++;
-  }, 900); // tempo entre cada nome (ajuste à vontade)
+    // Espera antes de ir para o próximo (mostra um por um)
+    await sleep(900);
+  }
+
+  // Finaliza animação
+  roletaEl.classList.remove("spin");
+  roletaEl.textContent = "Fim!";
 }
 
 // Utilidades
@@ -90,7 +79,6 @@ function appendItem(listEl, nome) {
 }
 
 function toLabel(nomeLower) {
-  // Padroniza exibição (capitalização simples)
   const mapa = {
     "gordão": "Gordão",
     "joao": "João",
@@ -119,4 +107,9 @@ function shuffle(array) {
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
   return arr;
+}
+
+// Pausa assíncrona
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
