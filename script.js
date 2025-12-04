@@ -1,3 +1,4 @@
+// Lista completa de jogadores
 const jogadores = [
   "andrew", "andrey", "gustavo", "iago", "joao", "carlos", "lincoln",
   "gordão", "rick", "dudu", "jeza", "ricardo", "piero", "gurjas", "hudson", "matheus"
@@ -18,9 +19,14 @@ const listaBranco = document.getElementById("timeBranco");
 const listaPreto = document.getElementById("timePreto");
 const listaProximos = document.getElementById("timeProximos");
 
+// TESTE: ver se script carregou
+console.log("script.js carregado corretamente!");
+
 btn.addEventListener("click", iniciarSorteio);
 
 async function iniciarSorteio() {
+  console.log("Botão clicado!"); // teste no console
+
   roletaEl.classList.add("spin");
   roletaEl.textContent = "?";
   listaBranco.innerHTML = "";
@@ -87,4 +93,11 @@ function shuffle(array) {
   const arr = [...array];
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-   
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
