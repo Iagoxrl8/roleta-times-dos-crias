@@ -1,14 +1,16 @@
-// Lista completa de jogadores (inclui Gurjas)
 const jogadores = [
   "andrew", "andrey", "gustavo", "iago", "joao", "carlos", "lincoln",
-  "gordão", "rick", "dudu", "jeza", "ricardo", "piero", "gurjas", "hudson"
+  "gordão", "rick", "dudu", "jeza", "ricardo", "piero", "gurjas", "hudson", "matheus"
 ];
 
-// Fixos no time preto (garantidos)
-const fixosPreto = ["joao", "iago", "ricardo", "gurjas", "hudson", "andrew"];
+// Fixos no time branco
+const fixosBranco = ["carlos", "piero", "jeza", "andrey"];
+
+// Fixos no time preto
+const fixosPreto = ["joao", "iago", "andrew", "gurjas"];
 
 // Fixos em "Próximos"
-const fixosProximos = ["dudu", "gustavo", "lincoln"];
+const fixosProximos = ["gordão"];
 
 const btn = document.getElementById("btnSortear");
 const roletaEl = document.getElementById("roleta");
@@ -35,8 +37,15 @@ async function iniciarSorteio() {
       appendItem(listaPreto, label);
     } else if (fixosProximos.includes(nomeLower)) {
       appendItem(listaProximos, label);
-    } else {
+    } else if (fixosBranco.includes(nomeLower)) {
       appendItem(listaBranco, label);
+    } else {
+      // os demais caem aleatoriamente em Branco ou Preto
+      if (Math.random() < 0.5) {
+        appendItem(listaBranco, label);
+      } else {
+        appendItem(listaPreto, label);
+      }
     }
 
     await sleep(900);
@@ -68,7 +77,8 @@ function toLabel(nomeLower) {
     "rick": "Rick",
     "dudu": "Dudu",
     "jeza": "Jeza",
-    "piero": "Piero"
+    "piero": "Piero",
+    "matheus": "Matheus"
   };
   return mapa[nomeLower] || nomeLower.charAt(0).toUpperCase() + nomeLower.slice(1);
 }
@@ -77,11 +87,4 @@ function shuffle(array) {
   const arr = [...array];
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+   
